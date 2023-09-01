@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     # my apps
     'accounts',
     'products',
+    'cart',
 ]
 
 REST_FRAMEWORK = {
@@ -58,7 +59,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=(60*24*30)), # 30 days life time
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
