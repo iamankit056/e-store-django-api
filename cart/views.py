@@ -28,17 +28,14 @@ class AddProductToCart(APIView):
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
     def post(self, request, pId):
-        data = {
-            "user": request.user,
-            "product": GetProduct(pId),
-        }
-        print(data)
-        serializeCart = UpdateCartSerializer(data=data)
-        if serializeCart.is_valid():
-            serializeCart.save()
-            return Response(status=status.HTTP_201_CREATED)
-        message = 'Product does not add.'
-        return Response(message, status=status.HTTP_406_NOT_ACCEPTABLE)
+        product = GetProduct(pId)
+        if product is None:
+            message = 'Product does not Found.'
+            return Response(message, status=status.HTTP_404_NOT_FOUND)
+        createCartItem = Cart(user=request.user, product=product)
+        print(createCartItem)
+        createCartItem.save()
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class RemoveProductToCart(APIView):
@@ -54,6 +51,8 @@ class RemoveProductToCart(APIView):
 
 
 class GetProductsIntoCart(APIView):
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
     def get(self, request):
         cartItems = Cart.objects.filter(user=request.user)
         serializeCart = CartSerializer(cartItems, many=True)
