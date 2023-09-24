@@ -8,5 +8,5 @@ class Cart(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.user} => {self.product} => {self.quentity}'
+        return f'{self.user} => {self.product}'
     
